@@ -1,0 +1,109 @@
+.add {
+    float: right;
+    font-size: 15px;
+    padding: 7px;
+
+    /* delete button styles */
+    background: none;
+    color: inherit;
+    border: none;
+    cursor: pointer;
+    outline: inherit;
+}
+
+.add:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+}
+
+.add__plus {
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+}
+
+.popup {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 20px 32px 28px;
+}
+
+.popup__title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.form__field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.field__name {
+    width: 150px;
+    font-size: 18px;
+}
+
+.field__input {
+    width: 320px;
+    padding: 5px;
+    border: solid darkgray 1px;
+    border-radius: 5px;
+}
+
+.form__buttons {
+    text-align: right;
+    margin-top: 30px;
+}
+
+.button {
+    /* delete styles */
+    background: none;
+    color: inherit;
+    border: none;
+    cursor: pointer;
+    outline: inherit;
+
+    width: 128px;
+    height: 36px;
+    border-radius: 2px;
+}
+
+.buttonCancel {
+    background: #d3d3d3;
+    margin-right: 10px;
+}
+
+.buttonSave {
+    background: #ffae33;
+}
+
+.box {
+    display: flex;
+    padding: 15px;
+}
+
+.connectionHeader {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.connectionLine {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    cursor: pointer;
+}
+
+.connectionLine:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.selectedConnectionLine {
+    background: rgba(2, 123, 243, 0.08) !important;
+}
+
+.connectionElement {
+    flex-basis: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

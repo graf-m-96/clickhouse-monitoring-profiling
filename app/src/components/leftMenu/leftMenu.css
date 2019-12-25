@@ -1,0 +1,13 @@
+.menuItem {
+    font-size: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.menuItem:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.menuItem_selected {
+    background: rgba(2, 123, 243, 0.08) !important;
+}

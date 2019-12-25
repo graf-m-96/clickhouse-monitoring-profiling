@@ -1,0 +1,6 @@
+{
+  "extends": "hrundel/browser",
+  "parserOptions": {
+    "sourceType": "module"
+  }
+}

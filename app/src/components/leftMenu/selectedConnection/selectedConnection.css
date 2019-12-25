@@ -1,0 +1,12 @@
+.container {
+    padding: 20px;
+    height: 138px;
+}
+
+.field {
+    margin-bottom: 5px;
+}
+
+.weight {
+    font-weight: 600;
+}

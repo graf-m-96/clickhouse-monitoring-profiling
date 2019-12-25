@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.square {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    border-radius: 4px;
+}
+
+.running .square {
+    background: #3bc935;
+}
+
+.unachievable .square {
+    background: #f00;
+}
+
+.waiting .square {
+    background: #ff0;
+}
+
