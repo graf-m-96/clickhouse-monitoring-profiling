@@ -14,7 +14,7 @@ export default class ApiManager {
             method: 'POST',
             data: options
         })
-            .then(answer => answer.data)
+            .then(answer => answer.data);
     }
 
     static getClusters(options) {
@@ -26,7 +26,7 @@ export default class ApiManager {
             method: 'POST',
             data: options
         })
-            .then(answer => answer.data)
+            .then(answer => answer.data);
     }
 
     static remote(options) {
@@ -38,7 +38,7 @@ export default class ApiManager {
             method: 'POST',
             data: options
         })
-            .then(answer => answer.data)
+            .then(answer => answer.data);
     }
 
     static getQueryLogs(options) {
@@ -50,6 +50,6 @@ export default class ApiManager {
             method: 'POST',
             data: options
         })
-            .then(answer => answer.data)
+            .then(answer => answer.data);
     }
 }

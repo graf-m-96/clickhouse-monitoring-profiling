@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import Title from "../header/contentHeader";
-import {MainContext} from "../../../contexts";
-import ApiManager from "../../../lib/requests";
+import Title from '../header/contentHeader';
+import { MainContext } from '../../../contexts';
+import ApiManager from '../../../lib/requests';
 
 import css from './logs.css';
 
@@ -11,28 +11,34 @@ const timeout = 20000;
 
 class Logs extends React.Component {
     static contextType = MainContext;
+    startDate;
+    endDate;
 
     constructor(props, context) {
         super(props, context);
         this.state = {
             error: false,
             table: undefined
-        }
+        };
     }
 
     componentDidMount() {
+        console.log('mount: ', Date.now());
         this.runPolling();
     }
 
-    runPolling() {
-        setInterval(async () => {
-            try {
-                const answer = await ApiManager.getQueryLogs(this.context.connections[this.context.connectionIndex]);
-                this.setState({ table: answer, error: false });
-            } catch (e) {
-                this.setState({ error: e.message });
-            }
-        }, timeout);
+    runPolling = async () => {
+        try {
+            const t = Date.now();
+            console.log('0: ', t);
+            const answer = await ApiManager.getQueryLogs(this.context.connections[this.context.connectionIndex]);
+            const t2 = Date.now();
+            console.log('1: ', t2);
+            console.log('diff: ', t2 - t);
+            this.setState({ table: answer, error: false });
+        } catch (e) {
+            this.setState({ error: e.message });
+        }
     }
 
     renderTable = () => {
@@ -57,7 +63,7 @@ class Logs extends React.Component {
                         ))}
                     </div>
                 </div>
-                {table.data.slice(0, 10).map((line, indexLine) => (
+                {table.data.map((line, indexLine) => (
                     <div
                         key={indexLine}
                         className={css.connectionLine}
@@ -76,7 +82,7 @@ class Logs extends React.Component {
                     </div>
                 ))}
             </div>
-        )
+        );
     };
 
     render() {
@@ -91,7 +97,7 @@ class Logs extends React.Component {
                         При получении кластеров произошла ошибка: {error}
                     </div>
                 </div>
-            )
+            );
         }
 
         return (

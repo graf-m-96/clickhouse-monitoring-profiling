@@ -5,7 +5,7 @@ import css from './contentHeader.css';
 
 class ContentHeader extends React.Component {
     render() {
-        const { pageName, children } = this.props;
+        const {pageName, children} = this.props;
 
         return (
             <div className={css.contentHeader}>

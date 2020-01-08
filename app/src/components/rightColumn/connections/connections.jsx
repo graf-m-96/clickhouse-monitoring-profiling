@@ -1,13 +1,13 @@
 import React from 'react';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import Popup from "reactjs-popup";
+import Popup from 'reactjs-popup';
 
-import Title from "../header/contentHeader";
+import Title from '../header/contentHeader';
 import Plus from '../../../public/icons/plus-sign.svg';
-import { connectionFields, connectionInOrder } from '../../../constans';
-import {MainContext} from "../../../contexts";
-import WatchedStatus from "./watchedStatus/watchedStatus";
+import { connectionFields, connectionFieldsInOrder } from '../../../constans';
+import { MainContext } from '../../../contexts';
+import WatchedStatus from './watchedStatus/watchedStatus';
 
 import css from './connections.css';
 
@@ -37,7 +37,7 @@ class Connections extends React.Component {
             <div className={css.popup}>
                 <div className={css.popup__title}>Добавление подключения</div>
                 <div ref={this.formRef}>
-                    {connectionInOrder.map(field => (
+                    {connectionFieldsInOrder.map(field => (
                         <div className={css.form__field}>
                             <div className={css.field__name}>{connectionFields[field]}</div>
                             <input
@@ -78,7 +78,7 @@ class Connections extends React.Component {
             return {
                 ...acc,
                 [input.name]: input.value
-            }
+            };
         }, {});
 
         this.context.addConnection(connection);
@@ -97,7 +97,7 @@ class Connections extends React.Component {
             <div>
                 <div className={css.connectionHeader}>
                     <div className={css.box}>
-                        {connectionInOrder.map((field, index) => (
+                        {connectionFieldsInOrder.map((field, index) => (
                             <div
                                 className={css.connectionElement}
                                 key={index}
@@ -108,10 +108,10 @@ class Connections extends React.Component {
                         ))}
                         <div
                             className={css.connectionElement}
-                            key={connectionInOrder.length + 1}
+                            key={connectionFieldsInOrder.length + 1}
                             title="status"
                         >
-                            status
+                            Статус
                         </div>
                     </div>
                 </div>
@@ -137,7 +137,7 @@ class Connections extends React.Component {
                             <div
                                 className={css.connectionElement}
                                 key={Object.keys(connectionFields).length + 1}
-                                title="status"
+                                title="Статус"
                             >
                                 <WatchedStatus connectionIndex={indexConnection} />
                             </div>

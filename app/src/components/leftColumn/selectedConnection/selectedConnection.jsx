@@ -1,14 +1,14 @@
 import React from 'react';
 import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
-import HostStatus from "../../status/hostStatus";
+import HostStatus from '../../status/hostStatus';
 
-import {MainContext} from "../../../contexts";
-import {hostStatuses, answerToHostStatus} from '../../../constans';
+import { MainContext } from '../../../contexts';
+import { hostStatuses, answerToHostStatus } from '../../../constans';
 import ApiManager from '../../../lib/requests';
 
 import css from './selectedConnection.css';
-import PropTypes from "prop-types";
 
 const timeout = 1000;
 
@@ -20,7 +20,7 @@ class SelectedConnection extends React.Component {
         super(props, context);
         this.state = {
             status: hostStatuses.waiting
-        }
+        };
     }
 
     componentDidMount() {
@@ -32,7 +32,7 @@ class SelectedConnection extends React.Component {
             this.lock = true;
             this.setState({ status: hostStatuses.waiting });
             setTimeout(() => {
-                this.lock = false
+                this.lock = false;
             }, timeout);
         }
     }

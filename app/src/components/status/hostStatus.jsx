@@ -11,7 +11,7 @@ class HostStatus extends React.Component {
     static contextType = MainContext;
 
     render() {
-        const { status } = this.props;
+        const {status} = this.props;
 
         return (
             <div className={classNames(css.container, css[status])}>

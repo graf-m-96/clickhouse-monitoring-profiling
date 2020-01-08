@@ -26,17 +26,18 @@ class Hosts extends React.Component {
 
     runPolling() {
         setInterval(async () => {
-            try{
+            try {
+                console.log('pinging')
                 const answer = await ApiManager.getClusters(this.context.connections[this.context.connectionIndex]);
-                this.setState({ table: answer, error: false });
+                this.setState({table: answer, error: false});
             } catch (e) {
-                this.setState({ error: e.message });
+                this.setState({error: e.message});
             }
         }, timeout);
     }
 
     renderTable = () => {
-        const { table } = this.state;
+        const {table} = this.state;
 
         if (!table) {
             return null;
@@ -83,8 +84,8 @@ class Hosts extends React.Component {
     };
 
     render() {
-        const { pageName } = this.props;
-        const { error } = this.state;
+        const {pageName} = this.props;
+        const {error} = this.state;
 
         if (error) {
             return (

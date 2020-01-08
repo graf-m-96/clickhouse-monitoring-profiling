@@ -1,3 +1,6 @@
 {
-    "extends": "hrundel/node"
+    "extends": "hrundel/node",
+    "rules": {
+        "max-len": ["error", { "code": 120 }]
+    }
 }

@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import SelectedConnection from "./selectedConnection/selectedConnection";
+import SelectedConnection from './selectedConnection/selectedConnection';
 
-import css from './leftMenu.css';
+import css from './leftColumn.css';
 
-class LeftMenu extends React.Component {
+class LeftColumn extends React.Component {
     render() {
-        const { menuItems, menuItemIndex, setMenuItem, connectionIndex } = this.props;
+        const { menuItems, menuItemIndex, selectMenuItem, connectionIndex } = this.props;
 
         return (
             <>
@@ -16,7 +16,7 @@ class LeftMenu extends React.Component {
                 {menuItems.map((menuItem, index) => (
                     <div
                         className={classNames(css.menuItem, menuItemIndex === index && css.menuItem_selected)}
-                        onClick={() => setMenuItem(index)}
+                        onClick={() => selectMenuItem(index)}
                         key={index}
                     >
                         {menuItem}
@@ -27,11 +27,11 @@ class LeftMenu extends React.Component {
     }
 }
 
-LeftMenu.propTypes = {
+LeftColumn.propTypes = {
     menuItems: PropTypes.arrayOf(PropTypes.string).isRequired,
     menuItemIndex: PropTypes.number.isRequired,
-    setMenuItem: PropTypes.func.isRequired,
+    selectMenuItem: PropTypes.func.isRequired,
     connectionIndex: PropTypes.number
 };
 
-export default LeftMenu;
+export default LeftColumn;

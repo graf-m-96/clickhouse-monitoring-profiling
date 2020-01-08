@@ -8,10 +8,11 @@ const defaultOptions = {
 
 const connections = {};
 
-function getKeyForConnection({ host, port, user }) {
+function getKeyForConnection({ host, port, user, password }) {
     return `host=${host};
         port=${port};
-        user=${user};`;
+        user=${user};
+        password=${password}`;
 }
 
 function saveConnection(clickHouseConnection, options) {

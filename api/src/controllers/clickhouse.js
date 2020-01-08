@@ -13,7 +13,6 @@ module.exports.ping = (req, res) => {
         });
 };
 
-// eslint-disable-next-line no-unused-vars
 module.exports.clusters = (req, res) => {
     const { ch } = req.locals;
 
@@ -23,7 +22,7 @@ module.exports.clusters = (req, res) => {
         })
         .catch(error => {
             res.status(500).send(error);
-        })
+        });
 };
 
 module.exports.remote = (req, res) => {
@@ -37,13 +36,14 @@ module.exports.remote = (req, res) => {
         })
         .catch(error => {
             res.status(500).send(error);
-        })
+        });
 };
 
-module.exports.query_log = (req, res) => {
+module.exports.queryLog = (req, res) => {
     const { ch } = req.locals;
 
-    const query = 'select * from system.query_log';
+    const query = 'select * from system.query_log limit 10';
+    console.log('query: ', query);
 
     return ch.querying(query)
         .then(data => {
@@ -51,5 +51,5 @@ module.exports.query_log = (req, res) => {
         })
         .catch(error => {
             res.status(500).send(error);
-        })
+        });
 };

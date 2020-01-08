@@ -24,20 +24,20 @@ class WatchedStatus extends React.Component {
     }
 
     runPolling() {
-        const { connections } = this.context;
-        const { connectionIndex } = this.props;
+        const {connections} = this.context;
+        const {connectionIndex} = this.props;
         const connection = connections[connectionIndex];
 
         setInterval(async () => {
             const answer = await ApiManager.ping(connection);
             const status = answer in answerToHostStatus ? answerToHostStatus[answer] : hostStatuses.unachievable;
 
-            this.setState({ status });
+            this.setState({status});
         }, timeout);
     }
 
     render() {
-        const { status } = this.state;
+        const {status} = this.state;
 
         return (
             <HostStatus status={status} />

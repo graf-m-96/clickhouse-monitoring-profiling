@@ -1,7 +1,7 @@
 import Head from 'next/head';
 
-import Header from "../components/header/header";
-import Main from "../components/main/main";
+import Header from '../components/header/header';
+import Main from '../components/main/main';
 
 import css from './index.css';
 
@@ -23,4 +23,4 @@ export default () => (
             <Main />
         </div>
     </>
-)
+);
