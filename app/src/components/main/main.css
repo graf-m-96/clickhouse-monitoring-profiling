@@ -11,7 +11,7 @@
 }
 
 .rightColumn {
-    /*min-width: 804px;*/
     flex-grow: 1;
     overflow: auto;
+    position: relative;
 }

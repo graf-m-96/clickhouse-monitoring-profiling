@@ -3,19 +3,18 @@ import React from 'react';
 import LeftColumn from '../leftColumn/leftColumn';
 import Connections from '../rightColumn/connections/connections';
 import Hosts from '../rightColumn/hosts/hosts';
-import Logs from '../rightColumn/logs/logs';
-import Check from '../check/check';
+import QueryLog from '../rightColumn/queryLog/queryLog';
 import Pinging from '../pinging/pinging';
 import { MainContext } from '../../contexts';
 import { hostStatuses } from '../../constans';
+import calculateScrollWidth from '../../lib/calculateScrollWidth';
 
 import css from './main.css';
 
 const menuKeyToPage = {
-    'Подключения': Connections,
-    'Хосты': Hosts,
-    'Проверка': Check,
-    'Логи': Logs
+    'connections': Connections,
+    'clusters': Hosts,
+    'query log': QueryLog
 };
 const menuItems = Object.keys(menuKeyToPage);
 
@@ -47,17 +46,26 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
 
-        this.addConnection = this.addConnection.bind(this);
-        this.selectConnection = this.selectConnection.bind(this);
-
         this.state = {
             menuItemIndex: 0,
+            // menuItemIndex: 2,
 
             connections: defaultConnections,
             connectionsStatuses: Array(defaultConnections.length).fill(hostStatuses.waiting),
             connectionIndex: undefined,
+            // connectionIndex: 0,
             selectConnection: this.selectConnection,
-            addConnection: this.addConnection
+            addConnection: this.addConnection,
+            deleteConnection: this.deleteConnection,
+            updateConnectionStatus: this.updateConnectionStatus,
+
+            hostsColumns: undefined,
+            hosts: undefined,
+            hostsStatuses: undefined,
+            setHosts: this.setHosts,
+            updateHostsStatuses: this.updateHostsStatuses,
+
+            scrollWidth: 0
         };
     }
 
@@ -65,7 +73,7 @@ class Main extends React.Component {
         this.setState({ menuItemIndex: index });
     };
 
-    addConnection(connection) {
+    addConnection = connection => {
         this.setState(state => {
             const newConnections = [...this.state.connections, connection];
             const newConnectionsStatuses = [...this.state.connectionsStatuses, hostStatuses.waiting];
@@ -76,16 +84,68 @@ class Main extends React.Component {
                 connectionsStatuses: newConnectionsStatuses
             };
         });
-    }
+    };
 
-    selectConnection(index) {
+    deleteConnection = index => {
+        const isCurrentConnection = index === this.state.connectionIndex;
+        this.setState(state => {
+            const newConnections = [...this.state.connections];
+            newConnections.splice(index, 1);
+            const newConnectionsStatuses = [...this.state.connectionsStatuses];
+            newConnectionsStatuses.splice(index, 1);
+
+            return {
+                ...state,
+                connections: newConnections,
+                connectionsStatuses: newConnectionsStatuses,
+                connectionIndex
+            }
+        });
+        if (isCurrentConnection) {
+            this.setState({ connectionIndex: undefined });
+            this.deleteHosts(index);
+        }
+    };
+
+    setHosts = ({ hostsColumns, hosts, hostsStatuses }) => {
+        this.setState({
+            hostsColumns,
+            hosts,
+            hostsStatuses
+        })
+    };
+
+    updateHostsStatuses = hostsStatuses => {
+        this.setState({ hostsStatuses });
+    };
+
+    deleteHosts = () => {
+        this.setState({
+            hostsColumns: undefined,
+            hosts: undefined,
+            hostsStatuses: undefined
+        });
+    };
+
+    selectConnection = index => {
         this.setState({ connectionIndex: index });
+        this.deleteHosts();
+    };
+
+    updateConnectionStatus = statuses => {
+        this.setState({ connectionsStatuses: statuses });
+    };
+
+    componentDidMount() {
+        const scrollWidth = calculateScrollWidth();
+
+        this.setState({ scrollWidth });
     }
 
     render() {
         const { menuItemIndex, connectionIndex } = this.state;
         const pageName = menuItems[menuItemIndex];
-        const rightColumn = React.createElement(menuKeyToPage[pageName], { pageName });
+        const rightColumn = React.createElement(menuKeyToPage[pageName]);
 
         return (
             <MainContext.Provider value={this.state}>

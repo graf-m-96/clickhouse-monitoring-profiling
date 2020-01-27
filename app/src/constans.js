@@ -1,17 +1,9 @@
 export const connectionFields = {
-    connectionName: 'connectionName',
+    connectionName: 'connection name',
     host: 'host',
     port: 'port',
     user: 'user',
     password: 'password'
-};
-
-export const connectionFieldsTranslation = {
-    [connectionFields.connectionName]: 'Имя подключения',
-    [connectionFields.host]: 'Хост',
-    [connectionFields.port]: 'Порт',
-    [connectionFields.user]: 'Пользователь',
-    [connectionFields.password]: 'Пароль'
 };
 
 export const connectionFieldsInOrder = [
@@ -20,8 +12,7 @@ export const connectionFieldsInOrder = [
     connectionFields.port,
     connectionFields.user,
     connectionFields.password
-]
-    .map(field => connectionFieldsTranslation[field]);
+];
 
 export const hostStatuses = {
     running: 'running',

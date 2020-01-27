@@ -1,20 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Popup from 'reactjs-popup';
 
-import Title from '../header/contentHeader';
 import Plus from '../../../public/icons/plus-sign.svg';
 import { connectionFields, connectionFieldsInOrder } from '../../../constans';
 import { MainContext } from '../../../contexts';
-import WatchedStatus from './watchedStatus/watchedStatus';
+import HostStatus from '../../status/hostStatus';
 
 import css from './connections.css';
 
 const modalStyles = {
     contentStyle: {
         width: '620px',
-        height: '352px',
+        height: '394px',
         padding: '0',
         borderRadius: '5px',
         border: 'none'
@@ -35,11 +33,28 @@ class Connections extends React.Component {
     renderPopup = (close) => {
         return (
             <div className={css.popup}>
-                <div className={css.popup__title}>Добавление подключения</div>
+                <div className={css.popup__title}>Adding connection</div>
                 <div ref={this.formRef}>
-                    {connectionFieldsInOrder.map(field => (
-                        <div className={css.form__field}>
-                            <div className={css.field__name}>{connectionFields[field]}</div>
+                    <div
+                        className={css.form__field}
+                        key={-1}
+                    >
+                        <div className={css.field__name}>protocol</div>
+                        <select
+                            className={classNames(css.field__input, css.field__select)}
+                            name="protocol"
+                            defaultValue="https"
+                        >
+                            <option>https</option>
+                            <option>http</option>
+                        </select>
+                    </div>
+                    {connectionFieldsInOrder.map((field, index) => (
+                        <div
+                            className={css.form__field}
+                            key={index}
+                        >
+                            <div className={css.field__name}>{field}</div>
                             <input
                                 className={css.field__input}
                                 name={field}
@@ -48,16 +63,16 @@ class Connections extends React.Component {
                     ))}
                     <div className={css.form__buttons}>
                         <button
-                            className={classNames(css.button, css.buttonCancel)}
+                            className={classNames(css.button, css.button__defaultSize, css.buttonCancel)}
                             onClick={close}
                         >
-                            Отменить
+                            Cancel
                         </button>
                         <button
-                            className={classNames(css.button, css.buttonSave)}
+                            className={classNames(css.button, css.button__defaultSize, css.buttonSave)}
                             onClick={this.addConnection}
                         >
-                            Добавить
+                            Add
                         </button>
                     </div>
                 </div>
@@ -69,8 +84,7 @@ class Connections extends React.Component {
         const form = this.formRef.current;
 
         if (!form) {
-
-            return;
+            return null;
         }
 
         const inputs = form.querySelectorAll('input');
@@ -93,15 +107,16 @@ class Connections extends React.Component {
     };
 
     renderConnections = () => {
+        const { connectionsStatuses } = this.context;
+
         return (
-            <div>
+            <div className={css.table}>
                 <div className={css.connectionHeader}>
                     <div className={css.box}>
                         {connectionFieldsInOrder.map((field, index) => (
                             <div
                                 className={css.connectionElement}
                                 key={index}
-                                title={field}
                             >
                                 {field}
                             </div>
@@ -109,9 +124,8 @@ class Connections extends React.Component {
                         <div
                             className={css.connectionElement}
                             key={connectionFieldsInOrder.length + 1}
-                            title="status"
                         >
-                            Статус
+                            status
                         </div>
                     </div>
                 </div>
@@ -129,7 +143,6 @@ class Connections extends React.Component {
                                 <div
                                     className={css.connectionElement}
                                     key={index}
-                                    title={connection[field]}
                                 >
                                     {connection[field]}
                                 </div>
@@ -137,9 +150,8 @@ class Connections extends React.Component {
                             <div
                                 className={css.connectionElement}
                                 key={Object.keys(connectionFields).length + 1}
-                                title="Статус"
                             >
-                                <WatchedStatus connectionIndex={indexConnection} />
+                                <HostStatus status={connectionsStatuses[indexConnection]} />
                             </div>
                         </div>
                     </div>
@@ -150,40 +162,37 @@ class Connections extends React.Component {
 
     selectConnection = index => {
         this.context.selectConnection(index);
-        this.forceUpdate();
+    };
+
+    renderMenu = () => {
+        return (
+            <div className={css.menu}>
+                <button className={classNames(css.button, css.buttonAdd)}>
+                    <Plus className={css.buttonAddPlus} />
+                    Add connection
+                </button>
+            </div>
+        )
     };
 
     render() {
-        const { pageName } = this.props;
-
         return (
             <div>
-                <Title pageName={pageName}>
-                    <Popup
-                        trigger={(
-                            <button className={css.add}>
-                                <Plus className={css.add__plus} />
-                                Добавить
-                            </button>
-                        )}
-                        modal
-                        closeOnDocumentClick
-                        lockScroll
-                        className={css.popup}
-                        overlayStyle={modalStyles.overlayStyle}
-                        contentStyle={modalStyles.contentStyle}
-                    >
-                        {close => this.renderPopup(close)}
-                    </Popup>
-                </Title>
+                <Popup
+                    trigger={this.renderMenu()}
+                    modal
+                    closeOnDocumentClick
+                    lockScroll
+                    className={css.popup}
+                    overlayStyle={modalStyles.overlayStyle}
+                    contentStyle={modalStyles.contentStyle}
+                >
+                    {close => this.renderPopup(close)}
+                </Popup>
                 {this.renderConnections()}
             </div>
         );
     }
 }
-
-Connections.propTypes = {
-    pageName: PropTypes.string.isRequired
-};
 
 export default Connections;

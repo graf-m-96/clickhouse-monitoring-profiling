@@ -1,9 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import {MainContext} from "../../contexts";
-import {hostStatuses} from '../../constans';
+import { MainContext } from '../../contexts';
+import { hostStatuses } from '../../constans';
 
 import css from './status.css';
 
@@ -11,7 +11,7 @@ class HostStatus extends React.Component {
     static contextType = MainContext;
 
     render() {
-        const {status} = this.props;
+        const { status } = this.props;
 
         return (
             <div className={classNames(css.container, css[status])}>

@@ -1,9 +1,9 @@
-.add {
-    float: right;
-    font-size: 15px;
-    padding: 7px;
+.menu {
+    height: 60px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
 
-    /* delete button styles */
+.button {
     background: none;
     color: inherit;
     border: none;
@@ -11,14 +11,33 @@
     outline: inherit;
 }
 
-.add:hover {
-    background: rgba(0, 0, 0, 0.04);
+.button__defaultSize {
+    width: 128px;
+    height: 36px;
+    border-radius: 2px;
+}
+
+.buttonCancel {
+    background: #d3d3d3;
+    margin-right: 10px;
+}
+
+.buttonSave {
+    background: #ffae33;
+}
+
+.buttonAdd {
+    float: right;
+    background: rgba(0, 0, 0, 0.15);
+    font-size: 15px;
+    padding: 7px;
+    margin: 8px;
     border-radius: 4px;
 }
 
-.add__plus {
-    width: 10px;
-    height: 10px;
+.buttonAddPlus {
+    width: 12px;
+    height: 12px;
     margin-right: 6px;
 }
 
@@ -30,9 +49,10 @@
 }
 
 .popup__title {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 600;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .form__field {
@@ -51,6 +71,16 @@
     padding: 5px;
     border: solid darkgray 1px;
     border-radius: 5px;
+    box-sizing: content-box;
+}
+
+.field__select {
+    background: none;
+    outline: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none !important;
 }
 
 .form__buttons {
@@ -58,39 +88,21 @@
     margin-top: 30px;
 }
 
-.button {
-    /* delete styles */
-    background: none;
-    color: inherit;
-    border: none;
-    cursor: pointer;
-    outline: inherit;
-
-    width: 128px;
-    height: 36px;
-    border-radius: 2px;
-}
-
-.buttonCancel {
-    background: #d3d3d3;
-    margin-right: 10px;
-}
-
-.buttonSave {
-    background: #ffae33;
+.table {
+    padding: 30px 15px;
 }
 
 .box {
     display: flex;
-    padding: 15px;
 }
 
 .connectionHeader {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 .connectionLine {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     cursor: pointer;
 }
 
@@ -106,4 +118,10 @@
     flex-basis: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-right: 1px solid rgba(0, 0, 0, 0.25);
+    padding: 15px;
+}
+
+.connectionElement:first-child {
+    border-left: 1px solid rgba(0, 0, 0, 0.25);
 }

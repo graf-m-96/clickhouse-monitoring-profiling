@@ -42,8 +42,7 @@ module.exports.remote = (req, res) => {
 module.exports.queryLog = (req, res) => {
     const { ch } = req.locals;
 
-    const query = 'select * from system.query_log limit 10';
-    console.log('query: ', query);
+    const query = 'select * from system.query_log limit 1000';
 
     return ch.querying(query)
         .then(data => {

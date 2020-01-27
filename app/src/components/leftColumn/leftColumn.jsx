@@ -8,11 +8,11 @@ import css from './leftColumn.css';
 
 class LeftColumn extends React.Component {
     render() {
-        const { menuItems, menuItemIndex, selectMenuItem, connectionIndex } = this.props;
+        const { menuItems, menuItemIndex, selectMenuItem } = this.props;
 
         return (
             <>
-                <SelectedConnection connectionIndex={connectionIndex} />
+                <SelectedConnection />
                 {menuItems.map((menuItem, index) => (
                     <div
                         className={classNames(css.menuItem, menuItemIndex === index && css.menuItem_selected)}
@@ -30,8 +30,7 @@ class LeftColumn extends React.Component {
 LeftColumn.propTypes = {
     menuItems: PropTypes.arrayOf(PropTypes.string).isRequired,
     menuItemIndex: PropTypes.number.isRequired,
-    selectMenuItem: PropTypes.func.isRequired,
-    connectionIndex: PropTypes.number
+    selectMenuItem: PropTypes.func.isRequired
 };
 
 export default LeftColumn;

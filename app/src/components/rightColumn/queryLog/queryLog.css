@@ -1,0 +1,86 @@
+.errorMessage {
+    margin: 20px;
+}
+
+.loadingAnimation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.settings {
+    margin: 10px 20px;
+}
+
+.autoloading__title,
+.hiddenColumns__title,
+.currentQuery__title,
+.limit__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 20px;
+    margin-bottom: 5px;
+}
+
+.autoloading__button {
+    cursor: pointer;
+    padding-left: 5px;
+}
+
+.autoloading__number {
+    width: 65px;
+    margin: 0 5px;
+}
+
+.autoloading,
+.hiddenColumns,
+.currentQuery {
+    margin-bottom: 20px;
+}
+
+.hiddenColumns__ceil {
+    padding: 5px;
+}
+
+.hiddenColumns__label {
+    cursor: pointer;
+}
+
+.dbSettings,
+.currentQuery__body {
+    margin: 0 0 20px 11px;
+}
+
+.dbSettings {
+    display: flex;
+    align-items: flex-end;
+}
+
+.button {
+    /* delete styles */
+    background: none;
+    color: inherit;
+    border: none;
+    cursor: pointer;
+    outline: inherit;
+
+    width: 128px;
+    height: 36px;
+    border-radius: 2px;
+    background: #d3d3d3;
+}
+
+.dbSettings__button,
+.dbSettings__connection {
+    margin-right: 40px;
+}
+
+.limit__title {
+    text-align: center;
+    margin-left: 0;
+}
+
+.limit__input {
+    width: 100px;
+}

@@ -1,9 +1,7 @@
 import React from 'react';
-import PropTypes from "prop-types";
 
-import Title from "../header/contentHeader";
-import {MainContext} from "../../../contexts";
-import ApiManager from "../../../lib/requests";
+import {MainContext} from '../../../contexts';
+import ApiManager from '../../../lib/requests';
 
 import css from './hosts.css';
 
@@ -27,7 +25,6 @@ class Hosts extends React.Component {
     runPolling() {
         setInterval(async () => {
             try {
-                console.log('pinging')
                 const answer = await ApiManager.getClusters(this.context.connections[this.context.connectionIndex]);
                 this.setState({table: answer, error: false});
             } catch (e) {
@@ -84,15 +81,13 @@ class Hosts extends React.Component {
     };
 
     render() {
-        const {pageName} = this.props;
         const {error} = this.state;
 
         if (error) {
             return (
                 <div>
-                    <Title pageName={pageName} />
                     <div className={css.errorMessage}>
-                        При получении кластеров произошла ошибка: {error}
+                        Error: {error}
                     </div>
                 </div>
             )
@@ -100,15 +95,10 @@ class Hosts extends React.Component {
 
         return (
             <div>
-                <Title pageName={pageName} />
                 {this.renderTable()}
             </div>
         );
     }
 }
-
-Hosts.propTypes = {
-    pageName: PropTypes.string.isRequired
-};
 
 export default Hosts;
