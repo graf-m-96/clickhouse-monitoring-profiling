@@ -51,21 +51,22 @@ class PingingConnections extends React.Component {
             }
 
             const connection = connections[connectionIndex];
-            let hostsColumns, hosts, hostsStatuses;
+            let answer;
 
-            // if (this.context.hosts) {
-            // { hostsColumns, hosts, hostsStatuses } = this.context;
+            if (this.context.hosts) {
+                answer = this.context;
+            } else {
+                const answerClusters = await ApiManager.getClusters(connection);
+                answer = this.prepareClustersAnswer(answerClusters);
+            }
 
-            // } else {
-            //     const answerClusters = await ApiManager.getClusters(connection);
-            //     console.log('clusters: ', answerClusters);
-            //     this.prepeareClustersAnswer(answerClusters);
-            // }
-            // const answers = await Promise.all(this.context.connections.map(ApiManager.ping));
-            // const statuses = answers.map(answer => this.convertAnswerToStatus(answer));
-            // const isOld = statuses.every((status, index) => {
-            //     return status === this.context.connectionsStatuses[index];
-            // });
+            const { hostsColumns, hosts, hostsStatuses } = answer;
+
+            const answers = await Promise.all(this.context.connections.map(ApiManager.ping));
+            const statuses = answers.map(answer => this.convertAnswerToStatus(answer));
+            const isOld = statuses.every((status, index) => {
+                return status === this.context.connectionsStatuses[index];
+            });
 
             // if (!isOld) {
             //     this.context.updateConnectionStatus(statuses);
@@ -81,11 +82,11 @@ class PingingConnections extends React.Component {
             : hostStatuses.unachievable;
     };
 
-    prepeareClustersAnswer = answer => {
+    prepareClustersAnswer = answer => {
         const hostsColumns = answer.meta;
         const hosts = answer.data.map(row => {
             return row.reduce((acc, el, index) => {
-                const columnName = hostsColumns[index].name
+                const columnName = hostsColumns[index].name;
                 acc[columnName] = el;
 
                 return acc;

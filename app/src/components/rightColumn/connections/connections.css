@@ -1,6 +1,6 @@
 .menu {
     height: 60px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 
 .button {
@@ -41,6 +41,11 @@
     margin-right: 6px;
 }
 
+.buttonDelete {
+    width: 24px;
+    height: 24px;
+}
+
 .popup {
     width: 100%;
     height: 100%;
@@ -65,6 +70,8 @@
     width: 150px;
     font-size: 18px;
 }
+
+.field__data {}
 
 .field__input {
     width: 320px;
@@ -120,6 +127,10 @@
     text-overflow: ellipsis;
     border-right: 1px solid rgba(0, 0, 0, 0.25);
     padding: 15px;
+}
+
+.connectionElement__small {
+    flex-basis: 50px;
 }
 
 .connectionElement:first-child {

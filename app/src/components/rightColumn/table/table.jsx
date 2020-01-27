@@ -60,14 +60,14 @@ function Table({
                             <div
                                 {...cell.getCellProps()}
                                 className={css.td}
-                                onDoubleClick={event => expandCeil(event)}
+                                onDoubleClick={expandCeil(css.overflowCeilVisible)}
                             >
                                 <div className={css.td__data}>
                                     {cell.render('Cell')}
                                 </div>
                                 <textarea
                                     className={classNames(css.overflowCeil)}
-                                    onBlur={shrinkCeil}
+                                    onBlur={shrinkCeil(css.overflowCeilVisible)}
                                 />
                             </div>
                         );

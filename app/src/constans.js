@@ -1,17 +1,17 @@
-export const connectionFields = {
-    connectionName: 'connection name',
+export const connectionInputs = {
+    'connection name': 'connection name',
     host: 'host',
     port: 'port',
     user: 'user',
     password: 'password'
 };
 
-export const connectionFieldsInOrder = [
-    connectionFields.connectionName,
-    connectionFields.host,
-    connectionFields.port,
-    connectionFields.user,
-    connectionFields.password
+export const connectionInputsInOrder = [
+    connectionInputs['connection name'],
+    connectionInputs.host,
+    connectionInputs.port,
+    connectionInputs.user,
+    connectionInputs.password
 ];
 
 export const hostStatuses = {

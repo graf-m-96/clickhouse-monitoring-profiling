@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import Popup from 'reactjs-popup';
 
 import Plus from '../../../public/icons/plus-sign.svg';
-import { connectionFields, connectionFieldsInOrder } from '../../../constans';
+import Delete from '../../../public/icons/delete.svg';
+import { connectionInputs, connectionInputsInOrder } from '../../../constans';
 import { MainContext } from '../../../contexts';
 import HostStatus from '../../status/hostStatus';
 
@@ -41,7 +42,7 @@ class Connections extends React.Component {
                     >
                         <div className={css.field__name}>protocol</div>
                         <select
-                            className={classNames(css.field__input, css.field__select)}
+                            className={classNames(css.field__data, css.field__input, css.field__select)}
                             name="protocol"
                             defaultValue="https"
                         >
@@ -49,14 +50,14 @@ class Connections extends React.Component {
                             <option>http</option>
                         </select>
                     </div>
-                    {connectionFieldsInOrder.map((field, index) => (
+                    {connectionInputsInOrder.map((field, index) => (
                         <div
                             className={css.form__field}
                             key={index}
                         >
                             <div className={css.field__name}>{field}</div>
                             <input
-                                className={css.field__input}
+                                className={classNames(css.field__data, css.field__input)}
                                 name={field}
                             />
                         </div>
@@ -87,8 +88,8 @@ class Connections extends React.Component {
             return null;
         }
 
-        const inputs = form.querySelectorAll('input');
-        const connection = [].reduce.call(inputs, (acc, input) => {
+        const fields = form.querySelectorAll(`.${css.field__data}`);
+        const connection = [].reduce.call(fields, (acc, input) => {
             return {
                 ...acc,
                 [input.name]: input.value
@@ -96,13 +97,15 @@ class Connections extends React.Component {
         }, {});
 
         this.context.addConnection(connection);
-        this.clearForm(inputs);
+        this.clearForm(fields);
         this.forceUpdate();
     };
 
-    clearForm = inputs => {
-        [].forEach.call(inputs, input => {
-            input.value = '';
+    clearForm = fields => {
+        [].forEach.call(fields, field => {
+            if (field.tagName === 'INPUT') {
+                field.value = '';
+            }
         });
     };
 
@@ -113,7 +116,24 @@ class Connections extends React.Component {
             <div className={css.table}>
                 <div className={css.connectionHeader}>
                     <div className={css.box}>
-                        {connectionFieldsInOrder.map((field, index) => (
+                        {/* actions */}
+                        <div
+                            className={classNames(css.connectionElement, css.connectionElement__small)}
+                            key={-3}
+                        />
+                        <div
+                            className={css.connectionElement}
+                            key={-2}
+                        >
+                            status
+                        </div>
+                        <div
+                            className={css.connectionElement}
+                            key={-1}
+                        >
+                            protocol
+                        </div>
+                        {connectionInputsInOrder.map((field, index) => (
                             <div
                                 className={css.connectionElement}
                                 key={index}
@@ -121,12 +141,6 @@ class Connections extends React.Component {
                                 {field}
                             </div>
                         ))}
-                        <div
-                            className={css.connectionElement}
-                            key={connectionFieldsInOrder.length + 1}
-                        >
-                            status
-                        </div>
                     </div>
                 </div>
                 {this.context.connections.map((connection, indexConnection) => (
@@ -139,7 +153,26 @@ class Connections extends React.Component {
                         onClick={() => this.selectConnection(indexConnection)}
                     >
                         <div className={css.box}>
-                            {Object.keys(connectionFields).map((field, index) => (
+                            <div
+                                className={classNames(css.connectionElement, css.connectionElement__small)}
+                                key={-3}
+                                onClick={event => this.deleteConnection(event, indexConnection)}
+                            >
+                                <Delete className={css.buttonDelete} />
+                            </div>
+                            <div
+                                className={css.connectionElement}
+                                key={-2}
+                            >
+                                <HostStatus status={connectionsStatuses[indexConnection]} />
+                            </div>
+                            <div
+                                className={css.connectionElement}
+                                key={-1}
+                            >
+                                {connection.protocol}
+                            </div>
+                            {Object.keys(connectionInputs).map((field, index) => (
                                 <div
                                     className={css.connectionElement}
                                     key={index}
@@ -147,17 +180,16 @@ class Connections extends React.Component {
                                     {connection[field]}
                                 </div>
                             ))}
-                            <div
-                                className={css.connectionElement}
-                                key={Object.keys(connectionFields).length + 1}
-                            >
-                                <HostStatus status={connectionsStatuses[indexConnection]} />
-                            </div>
                         </div>
                     </div>
                 ))}
             </div>
         );
+    };
+
+    deleteConnection = (event, index) => {
+        event.stopPropagation();
+        this.context.deleteConnection(index);
     };
 
     selectConnection = index => {
@@ -172,7 +204,7 @@ class Connections extends React.Component {
                     Add connection
                 </button>
             </div>
-        )
+        );
     };
 
     render() {

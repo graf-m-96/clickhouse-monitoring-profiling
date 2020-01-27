@@ -6,7 +6,7 @@
   "author": "graf-m-96",
   "license": "ISC",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . --ext .js",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },

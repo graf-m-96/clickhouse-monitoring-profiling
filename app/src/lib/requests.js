@@ -29,8 +29,8 @@ export default class ApiManager {
             .then(answer => answer.data);
     }
 
-    static remote(options) {
-        return axios(`${apiUrl}/remote`, {
+    static pingRemote(options) {
+        return axios(`${apiUrl}/ping_remote`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

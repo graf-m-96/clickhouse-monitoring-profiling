@@ -6,13 +6,13 @@
   "author": "graf-m-96",
   "license": "ISC",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . --ext .js,.jsx",
     "dev": "node index.js",
     "build": "next build ./src",
     "start": "cross-env NODE_ENV=production node index.js"
   },
   "engines": {
-    "node": "12.14.0"
+    "node": "12.14.1"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "framer-motion": "^1.7.0",
+    "lodash": "^4.17.15",
     "match-sorter": "^4.0.2",
     "namor": "^2.0.2",
     "next": "^9.1.6",

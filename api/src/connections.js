@@ -8,8 +8,9 @@ const defaultOptions = {
 
 const connections = {};
 
-function getKeyForConnection({ host, port, user, password }) {
-    return `host=${host};
+function getKeyForConnection({ protocol, host, port, user, password }) {
+    return `protocol=${protocol}
+        host=${host};
         port=${port};
         user=${user};
         password=${password}`;

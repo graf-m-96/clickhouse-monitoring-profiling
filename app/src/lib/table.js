@@ -1,11 +1,11 @@
-export const expandCeil = event => {
+export const expandCeil = addedClass => event => {
     const [divNode, textArea] = event.currentTarget.childNodes;
     const text = divNode.textContent;
     textArea.value = text;
-    textArea.classList.add(css.overflowCeilVisible);
+    textArea.classList.add(addedClass);
     textArea.focus();
 };
-export const shrinkCeil = event => {
+export const shrinkCeil = addedClass => event => {
     const textArea = event.target;
-    textArea.classList.remove(css.overflowCeilVisible);
+    textArea.classList.remove(addedClass);
 };

@@ -25,7 +25,7 @@ module.exports.clusters = (req, res) => {
         });
 };
 
-module.exports.remote = (req, res) => {
+module.exports.pingRemote = (req, res) => {
     const { ch } = req.locals;
     const { otherHost, otherPort, user, password } = req.body;
     const query = `select 1 from remote('${otherHost}:${otherPort}', system.clusters, '${user}', '${password}')`;

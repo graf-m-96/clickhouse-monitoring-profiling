@@ -19,7 +19,7 @@ class QueryLog extends React.Component {
             autoloadingTimeout: 3000,
             hiddenColumns: {},
             limitCount: 1000,
-            query: '',
+            query: ''
         };
         this.autoloadingTimeoutRef = React.createRef();
         this.where = {};
@@ -39,7 +39,7 @@ class QueryLog extends React.Component {
         } catch (error) {
             this.setError(error);
         }
-    }
+    };
 
     setLogs = logs => {
         const { columns, data } = this.prepareAnswer(logs);
@@ -54,7 +54,7 @@ class QueryLog extends React.Component {
         this.where = {
             ...this.where,
             ...filter
-        }
+        };
     };
 
     renderSettings = () => {
@@ -204,7 +204,7 @@ class QueryLog extends React.Component {
     };
 
     onRun = () => {
-        console.log('qq')
+        console.log('qq');
     };
 
     prepareAnswer = logs => {

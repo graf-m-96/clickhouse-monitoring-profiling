@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Select from '../select/select';
 import replaceAll from '../../../lib/replaceAll';
 
-import css from './filter.css'
+import css from './filter.css';
 
 const filterTypes = {
     Enum: 'Enum',
@@ -30,13 +30,13 @@ class Filter extends React.Component {
         if (s.startsWith(filterTypes.Enum)) {
             this.type = filterTypes.Enum;
             let variants = s.slice(s.indexOf('(') + 1, -1);
-            variants = replaceAll(variants, "'", '')
-            variants = replaceAll(variants, ' ', '')
+            variants = replaceAll(variants, '\'', '');
+            variants = replaceAll(variants, ' ', '');
             variants = variants.split(',');
             this.variants = {};
             variants.forEach(str => {
                 const [key, value] = str.split('=');
-                this.variants[key] = value
+                this.variants[key] = value;
             });
         } else if (s === filterTypes.Date) {
             this.type = filterTypes.Date;
@@ -63,6 +63,7 @@ class Filter extends React.Component {
                     return `${fieldName} = ${variant.label}`;
                 })
                     .join(' or ');
+
                 return `(${where})`;
             }
             case filterTypes.Date:
@@ -71,6 +72,7 @@ class Filter extends React.Component {
                     return '';
                 }
                 const value = this.ref1.current.value.replace('T', ' ');
+
                 return `${fieldName} = '${value}'`;
             }
             case filterTypes.Int: {
@@ -88,14 +90,17 @@ class Filter extends React.Component {
                     const number = parseInt(value2);
                     results.push(`${fieldName} <= ${number}`);
                 }
+
                 return results.join(' and ');
             }
             case filterTypes.Array: {
                 const value = this.ref1.current.value;
+
                 return `has(${fieldName}, ${value})`;
             }
             default: {
                 const value = this.ref1.current.value;
+
                 return `${fieldName} = ${value}`;
             }
         }
@@ -153,7 +158,7 @@ class Filter extends React.Component {
                             ref={this.ref2}
                         />
                     </>
-                )
+                );
             default:
                 return (
                     <input

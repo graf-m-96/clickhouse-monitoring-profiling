@@ -8,6 +8,7 @@ import Pinging from '../pinging/pinging';
 import { MainContext } from '../../contexts';
 import { hostStatuses } from '../../constans';
 import calculateScrollWidth from '../../lib/calculateScrollWidth';
+import { getConnections, saveConnections } from '../../lib/storage';
 
 import css from './main.css';
 
@@ -18,29 +19,32 @@ const menuKeyToPage = {
 };
 const menuItems = Object.keys(menuKeyToPage);
 
-const defaultConnections = [
-    {
-        connectionName: 'default',
-        host: '127.0.0.1',
-        port: '8123',
-        user: 'default',
-        password: '1'
-    },
-    {
-        connectionName: 'first',
-        host: '127.0.0.1',
-        port: '8124',
-        user: 'default',
-        password: '1'
-    },
-    {
-        connectionName: 'second',
-        host: 'localhost',
-        port: '8125',
-        user: 'default',
-        password: '1'
-    }
-];
+// const defaultConnections = [
+// //     {
+// //         protocol: 'http',
+// //         'connection name': 'default',
+// //         host: '127.0.0.1',
+// //         port: '8123',
+// //         user: 'default',
+// //         password: '1'
+// //     },
+// //     {
+// //         protocol: 'http',
+// //         'connection name': 'first',
+// //         host: '127.0.0.1',
+// //         port: '8124',
+// //         user: 'default',
+// //         password: '1'
+// //     },
+// //     {
+// //         protocol: 'http',
+// //         'connection name': 'second',
+// //         host: 'localhost',
+// //         port: '8125',
+// //         user: 'default',
+// //         password: '1'
+// //     }
+// // ];
 
 class Main extends React.Component {
     constructor(props) {
@@ -50,8 +54,8 @@ class Main extends React.Component {
             menuItemIndex: 0,
             // menuItemIndex: 2,
 
-            connections: defaultConnections,
-            connectionsStatuses: Array(defaultConnections.length).fill(hostStatuses.waiting),
+            connections: [],
+            connectionsStatuses: [],
             connectionIndex: undefined,
             // connectionIndex: 0,
             selectConnection: this.selectConnection,
@@ -78,6 +82,8 @@ class Main extends React.Component {
             const newConnections = [...this.state.connections, connection];
             const newConnectionsStatuses = [...this.state.connectionsStatuses, hostStatuses.waiting];
 
+            saveConnections(newConnections);
+
             return {
                 ...state,
                 connections: newConnections,
@@ -94,12 +100,13 @@ class Main extends React.Component {
             const newConnectionsStatuses = [...this.state.connectionsStatuses];
             newConnectionsStatuses.splice(index, 1);
 
+            saveConnections(newConnections);
+
             return {
                 ...state,
                 connections: newConnections,
-                connectionsStatuses: newConnectionsStatuses,
-                connectionIndex
-            }
+                connectionsStatuses: newConnectionsStatuses
+            };
         });
         if (isCurrentConnection) {
             this.setState({ connectionIndex: undefined });
@@ -112,7 +119,7 @@ class Main extends React.Component {
             hostsColumns,
             hosts,
             hostsStatuses
-        })
+        });
     };
 
     updateHostsStatuses = hostsStatuses => {
@@ -138,8 +145,13 @@ class Main extends React.Component {
 
     componentDidMount() {
         const scrollWidth = calculateScrollWidth();
+        const defaultConnections = getConnections();
 
-        this.setState({ scrollWidth });
+        this.setState({
+            scrollWidth,
+            connections: defaultConnections,
+            connectionsStatuses: Array(defaultConnections.length).fill(hostStatuses.waiting)
+        });
     }
 
     render() {

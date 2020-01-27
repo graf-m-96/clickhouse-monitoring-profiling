@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {MainContext} from '../../../contexts';
+import { MainContext } from '../../../contexts';
 import ApiManager from '../../../lib/requests';
 
 import css from './hosts.css';
@@ -81,7 +81,7 @@ class Hosts extends React.Component {
     };
 
     render() {
-        const {error} = this.state;
+        const { error } = this.state;
 
         if (error) {
             return (
@@ -90,7 +90,7 @@ class Hosts extends React.Component {
                         Error: {error}
                     </div>
                 </div>
-            )
+            );
         }
 
         return (

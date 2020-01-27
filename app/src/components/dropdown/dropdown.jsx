@@ -45,7 +45,8 @@ class Dropdown extends React.Component {
 Dropdown.propTypes = {
     header: PropTypes.object.isRequired,
     classNameHeader: PropTypes.string,
-    open: PropTypes.bool
+    open: PropTypes.bool,
+    children: PropTypes.any
 };
 
 export default Dropdown;
