@@ -4,9 +4,8 @@ module.exports.ping = (req, res) => {
     const { ch } = req.locals;
 
     return ch.pinging()
-        .then(data => {
-            // Ok.\n
-            res.send(data);
+        .then(() => {
+            res.send('Ok.\n');
         })
         .catch(() => {
             res.send('No signal.\n');
@@ -28,14 +27,17 @@ module.exports.clusters = (req, res) => {
 module.exports.pingRemote = (req, res) => {
     const { ch } = req.locals;
     const { otherHost, otherPort, user, password } = req.body;
-    const query = `select 1 from remote('${otherHost}:${otherPort}', system.clusters, '${user}', '${password}')`;
+    const query = `select 1
+from remote('${otherHost}:${otherPort}', system.clusters, '${user}', '${password}')
+limit 1`;
 
     return ch.querying(query)
         .then(data => {
-            res.send(data);
+            // Ok.\n
+            res.send('Ok.\n');
         })
-        .catch(error => {
-            res.status(500).send(error);
+        .catch(() => {
+            res.send('No signal.\n');
         });
 };
 

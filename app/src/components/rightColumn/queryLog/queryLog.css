@@ -16,7 +16,8 @@
 .autoloading__title,
 .hiddenColumns__title,
 .currentQuery__title,
-.limit__title {
+.limit__title,
+.connection__title {
     font-size: 18px;
     font-weight: 600;
     margin-left: 20px;
@@ -72,11 +73,13 @@
 }
 
 .dbSettings__button,
+.dbSettings__limit,
 .dbSettings__connection {
     margin-right: 40px;
 }
 
-.limit__title {
+.limit__title,
+.connection__title {
     text-align: center;
     margin-left: 0;
 }

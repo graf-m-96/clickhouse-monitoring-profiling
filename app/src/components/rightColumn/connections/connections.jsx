@@ -122,7 +122,7 @@ class Connections extends React.Component {
                             key={-3}
                         />
                         <div
-                            className={css.connectionElement}
+                            className={classNames(css.connectionElement, css.connectionElement__big)}
                             key={-2}
                         >
                             status
@@ -161,7 +161,7 @@ class Connections extends React.Component {
                                 <Delete className={css.buttonDelete} />
                             </div>
                             <div
-                                className={css.connectionElement}
+                                className={classNames(css.connectionElement, css.connectionElement__big)}
                                 key={-2}
                             >
                                 <HostStatus status={connectionsStatuses[indexConnection]} />

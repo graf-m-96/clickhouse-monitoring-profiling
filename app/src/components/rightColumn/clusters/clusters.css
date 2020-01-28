@@ -1,0 +1,33 @@
+.errorMessage {
+    margin: 20px;
+}
+
+.loadingAnimation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.settings {
+    margin: 10px 20px;
+}
+
+.hiddenColumns {
+    margin-bottom: 20px;
+}
+
+.hiddenColumns__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 20px;
+    margin-bottom: 5px;
+}
+
+.hiddenColumns__ceil {
+    padding: 5px;
+}
+
+.hiddenColumns__label {
+    cursor: pointer;
+}

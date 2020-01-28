@@ -6,6 +6,7 @@ import { MainContext } from '../../../contexts';
 import ApiManager from '../../../lib/requests';
 import Table from '../table/table';
 import Dropdown from '../../dropdown/dropdown';
+import { hostStatuses } from '../../../constans';
 
 import css from './queryLog.css';
 
@@ -61,7 +62,7 @@ class QueryLog extends React.Component {
         return (
             <div className={css.settings}>
                 {this.renderAutoloading()}
-                {this.renderShownColumns()}
+                {this.renderHiddenColumns()}
                 {this.renderCurrentQuery()}
                 {this.renderDbSettings()}
             </div>
@@ -108,7 +109,7 @@ class QueryLog extends React.Component {
         this.setState({ autoloadingTimeout: event.target.value });
     };
 
-    renderShownColumns = () => {
+    renderHiddenColumns = () => {
         const rows = [];
         let currentRow = [];
         this.state.columns.forEach(field => {
@@ -154,6 +155,14 @@ class QueryLog extends React.Component {
         );
     };
 
+    toggleHiddenColumn = (event, fieldName) => {
+        const newHiddenColumns = {
+            ...this.state.hiddenColumns,
+            [fieldName]: event.target.checked
+        };
+        this.setState({ hiddenColumns: newHiddenColumns });
+    };
+
     renderCurrentQuery = () => {
         return (
             <div className={css.currentQuery}>
@@ -191,9 +200,10 @@ class QueryLog extends React.Component {
                 </div>
                 <div className={css.dbSettings__connection}>
                     <div className={css.connection__title}>Connection</div>
-                    <input
-                        className={css.connection__select}
-                    />
+                    <select className={css.connection__select}>
+                        <option>Пункт 1</option>
+                        <option>Пункт 2</option>
+                    </select>
                 </div>
             </div>
         );
@@ -228,38 +238,55 @@ class QueryLog extends React.Component {
     };
 
     render() {
+        const { connectionIndex, connectionsStatuses } = this.context;
         const { logs, columns, data, error, hiddenColumns } = this.state;
 
-        if (error) {
+        if (connectionIndex === undefined) {
             return (
                 <div className={css.errorMessage}>
-                    Error: {error}
+                    Connection is not selected
                 </div>
             );
         }
 
-        if (logs) {
+        if (connectionsStatuses[connectionIndex] === hostStatuses.unachievable) {
             return (
-                <>
-                    {this.renderSettings()}
-                    <Table
-                        allColumns={columns}
-                        data={data}
-                        hiddenColumns={hiddenColumns}
-                        updateWhere={this.updateWhere}
-                    />
-                </>
+                <div className={css.errorMessage}>
+                    Connection is not unachievable
+                </div>
+            );
+        }
+
+        if (error) {
+            return (
+                <div className={css.errorMessage}>
+                    {error}
+                </div>
+            );
+        }
+
+        if (!logs) {
+            return (
+                <ReactLoading
+                    type="spinningBubbles"
+                    width="200px"
+                    height="200px"
+                    color="rgba(0, 0, 0, 0.3)"
+                    className={css.loadingAnimation}
+                />
             );
         }
 
         return (
-            <ReactLoading
-                type="spinningBubbles"
-                width="200px"
-                height="200px"
-                color="rgba(0, 0, 0, 0.3)"
-                className={css.loadingAnimation}
-            />
+            <>
+                {this.renderSettings()}
+                <Table
+                    allColumns={columns}
+                    data={data}
+                    hiddenColumns={hiddenColumns}
+                    updateWhere={this.updateWhere}
+                />
+            </>
         );
     }
 }

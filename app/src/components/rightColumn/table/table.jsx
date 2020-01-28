@@ -3,6 +3,7 @@ import { useTable, useBlockLayout, useResizeColumns, useGlobalFilter } from 'rea
 import { FixedSizeList } from 'react-window';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import _noop from 'lodash/noop';
 
 import { MainContext } from '../../../contexts';
 import Filter from '../filter/filter';
@@ -16,9 +17,10 @@ const heightColumn = 71;
 function Table({
     allColumns,
     data,
-    updateWhere,
+    updateWhere = _noop,
     hiddenColumns = {},
-    defaultColumn = { minWidth: 70, width: 250 }
+    defaultColumn = { minWidth: 70, width: 250 },
+    options = { useFilter: true }
 }) {
     const columns = React.useMemo(() => (
         allColumns.filter(column => !hiddenColumns[column.Header])
@@ -114,11 +116,13 @@ function Table({
                             <div className={css.th__type}>
                                 {column.type}
                             </div>
-                            <Filter
-                                rawType={column.type}
-                                fieldName={column.Header}
-                                updateWhere={updateWhere}
-                            />
+                            {options.useFilter && (
+                                <Filter
+                                    rawType={column.type}
+                                    fieldName={column.Header}
+                                    updateWhere={updateWhere}
+                                />
+                            )}
                             <div
                                 {...column.getResizerProps()}
                                 className={css.resizer}
@@ -154,7 +158,8 @@ Table.propTypes = {
     data: PropTypes.array.isRequired,
     hiddenColumns: PropTypes.object,
     updateWhere: PropTypes.func,
-    defaultColumn: PropTypes.object
+    defaultColumn: PropTypes.object,
+    options: PropTypes.object
 };
 
 export default Table;

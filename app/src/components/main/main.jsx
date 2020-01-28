@@ -2,7 +2,7 @@ import React from 'react';
 
 import LeftColumn from '../leftColumn/leftColumn';
 import Connections from '../rightColumn/connections/connections';
-import Hosts from '../rightColumn/hosts/hosts';
+import Clusters from '../rightColumn/clusters/clusters';
 import QueryLog from '../rightColumn/queryLog/queryLog';
 import Pinging from '../pinging/pinging';
 import { MainContext } from '../../contexts';
@@ -14,37 +14,10 @@ import css from './main.css';
 
 const menuKeyToPage = {
     'connections': Connections,
-    'clusters': Hosts,
+    'clusters': Clusters,
     'query log': QueryLog
 };
 const menuItems = Object.keys(menuKeyToPage);
-
-// const defaultConnections = [
-// //     {
-// //         protocol: 'http',
-// //         'connection name': 'default',
-// //         host: '127.0.0.1',
-// //         port: '8123',
-// //         user: 'default',
-// //         password: '1'
-// //     },
-// //     {
-// //         protocol: 'http',
-// //         'connection name': 'first',
-// //         host: '127.0.0.1',
-// //         port: '8124',
-// //         user: 'default',
-// //         password: '1'
-// //     },
-// //     {
-// //         protocol: 'http',
-// //         'connection name': 'second',
-// //         host: 'localhost',
-// //         port: '8125',
-// //         user: 'default',
-// //         password: '1'
-// //     }
-// // ];
 
 class Main extends React.Component {
     constructor(props) {
@@ -52,22 +25,20 @@ class Main extends React.Component {
 
         this.state = {
             menuItemIndex: 0,
-            // menuItemIndex: 2,
 
             connections: [],
             connectionsStatuses: [],
             connectionIndex: undefined,
-            // connectionIndex: 0,
             selectConnection: this.selectConnection,
             addConnection: this.addConnection,
             deleteConnection: this.deleteConnection,
             updateConnectionStatus: this.updateConnectionStatus,
 
-            hostsColumns: undefined,
-            hosts: undefined,
-            hostsStatuses: undefined,
-            setHosts: this.setHosts,
-            updateHostsStatuses: this.updateHostsStatuses,
+            clustersColumns: undefined,
+            clusters: undefined,
+            clustersStatuses: undefined,
+            setClusters: this.setClusters,
+            updateClustersStatuses: this.updateClustersStatuses,
 
             scrollWidth: 0
         };
@@ -110,33 +81,33 @@ class Main extends React.Component {
         });
         if (isCurrentConnection) {
             this.setState({ connectionIndex: undefined });
-            this.deleteHosts(index);
+            this.clearClusters(index);
         }
     };
 
-    setHosts = ({ hostsColumns, hosts, hostsStatuses }) => {
+    setClusters = ({ clustersColumns, clusters, clustersStatuses }) => {
         this.setState({
-            hostsColumns,
-            hosts,
-            hostsStatuses
+            clustersColumns,
+            clusters,
+            clustersStatuses
         });
     };
 
-    updateHostsStatuses = hostsStatuses => {
-        this.setState({ hostsStatuses });
+    updateClustersStatuses = clustersStatuses => {
+        this.setState({ clustersStatuses });
     };
 
-    deleteHosts = () => {
+    clearClusters = () => {
         this.setState({
-            hostsColumns: undefined,
-            hosts: undefined,
-            hostsStatuses: undefined
+            clustersColumns: undefined,
+            clusters: undefined,
+            clustersStatuses: undefined
         });
     };
 
     selectConnection = index => {
         this.setState({ connectionIndex: index });
-        this.deleteHosts();
+        this.clearClusters();
     };
 
     updateConnectionStatus = statuses => {

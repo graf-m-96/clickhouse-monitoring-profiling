@@ -21,14 +21,14 @@ class PingingConnections extends React.Component {
     runPolling = () => {
         this.intervalId = setInterval(() => {
             this.runPollingConnections();
-            this.runPollingHosts();
+            this.runPollingClusters();
         }, timeout);
     };
 
     runPollingConnections = async () => {
         try {
-            const answers = await Promise.all(this.context.connections.map(ApiManager.ping));
-            const statuses = answers.map(answer => this.convertAnswerToStatus(answer));
+            const pings = await Promise.all(this.context.connections.map(ApiManager.ping));
+            const statuses = pings.map(this.convertAnswerToStatus);
             const isOld = statuses.every((status, index) => {
                 return status === this.context.connectionsStatuses[index];
             });
@@ -41,7 +41,7 @@ class PingingConnections extends React.Component {
         }
     };
 
-    runPollingHosts = async () => {
+    runPollingClusters = async () => {
         try {
             const { connectionIndex, connectionsStatuses, connections } = this.context;
 
@@ -51,26 +51,37 @@ class PingingConnections extends React.Component {
             }
 
             const connection = connections[connectionIndex];
-            let answer;
+            let dataAboutClusters;
 
-            if (this.context.hosts) {
-                answer = this.context;
+            if (this.context.clusters) {
+                dataAboutClusters = this.context;
             } else {
                 const answerClusters = await ApiManager.getClusters(connection);
-                answer = this.prepareClustersAnswer(answerClusters);
+                dataAboutClusters = this.prepareClustersAnswer(answerClusters);
             }
 
-            const { hostsColumns, hosts, hostsStatuses } = answer;
+            const { clusters, clustersStatuses } = dataAboutClusters;
 
-            const answers = await Promise.all(this.context.connections.map(ApiManager.ping));
-            const statuses = answers.map(answer => this.convertAnswerToStatus(answer));
+            const pings = await Promise.all(clusters.map(cluster => {
+                const options = {
+                    host: connection.host,
+                    port: connection.port,
+                    user: connection.user,
+                    password: connection.password,
+                    otherHost: cluster.host_name,
+                    otherPort: cluster.port
+                };
+
+                return ApiManager.pingRemote(options);
+            }));
+            const statuses = pings.map(this.convertAnswerToStatus);
             const isOld = statuses.every((status, index) => {
-                return status === this.context.connectionsStatuses[index];
+                return status === clustersStatuses[index];
             });
 
-            // if (!isOld) {
-            //     this.context.updateConnectionStatus(statuses);
-            // }
+            if (!isOld) {
+                this.context.updateClustersStatuses(statuses);
+            }
         } catch (e) {
             // ignore
         }
@@ -83,20 +94,31 @@ class PingingConnections extends React.Component {
     };
 
     prepareClustersAnswer = answer => {
-        const hostsColumns = answer.meta;
-        const hosts = answer.data.map(row => {
+        const clustersColumns = answer.meta.map(column => ({
+            ...column,
+            Header: column.name,
+            accessor: column.name
+        }));
+        const clusters = answer.data.map(row => {
             return row.reduce((acc, el, index) => {
-                const columnName = hostsColumns[index].name;
+                const columnName = clustersColumns[index].name;
                 acc[columnName] = el;
 
                 return acc;
             }, {});
         });
-        const hostsStatuses = Array(hostsColumns.length).fill(hostStatuses.waiting);
+        const extraColumn = 'status';
+        clustersColumns.unshift({
+            Header: extraColumn,
+            accessor: extraColumn,
+            name: extraColumn,
+            type: ''
+        });
+        const clustersStatuses = Array(clusters.length).fill(hostStatuses.waiting);
 
-        this.context.setHosts({ hostsColumns, hosts, hostsStatuses });
+        this.context.setClusters({ clustersColumns, clusters, clustersStatuses });
 
-        return { hostsColumns, hosts, hostsStatuses };
+        return { clustersColumns, clusters, clustersStatuses };
     };
 
     render() {
