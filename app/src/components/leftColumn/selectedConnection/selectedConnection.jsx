@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import HostStatus from '../../status/hostStatus';
+import HostStatus from '../../hostsStatus/hostStatus';
 
 import { MainContext } from '../../../contexts';
 

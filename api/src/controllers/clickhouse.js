@@ -32,7 +32,7 @@ from remote('${otherHost}:${otherPort}', system.clusters, '${user}', '${password
 limit 1`;
 
     return ch.querying(query)
-        .then(data => {
+        .then(() => {
             // Ok.\n
             res.send('Ok.\n');
         })
@@ -41,10 +41,9 @@ limit 1`;
         });
 };
 
-module.exports.queryLog = (req, res) => {
+module.exports.query = (req, res) => {
     const { ch } = req.locals;
-
-    const query = 'select * from system.query_log limit 1000';
+    const { query } = req.body;
 
     return ch.querying(query)
         .then(data => {

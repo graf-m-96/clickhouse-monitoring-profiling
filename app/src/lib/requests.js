@@ -41,14 +41,17 @@ export default class ApiManager {
             .then(answer => answer.data);
     }
 
-    static getQueryLogs(options) {
-        return axios(`${apiUrl}/query_log`, {
+    static sendQuery(options, query) {
+        return axios(`${apiUrl}/query`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             method: 'POST',
-            data: options
+            data: {
+                ...options,
+                query
+            }
         })
             .then(answer => answer.data);
     }

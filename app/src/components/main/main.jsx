@@ -3,19 +3,23 @@ import React from 'react';
 import LeftColumn from '../leftColumn/leftColumn';
 import Connections from '../rightColumn/connections/connections';
 import Clusters from '../rightColumn/clusters/clusters';
-import QueryLog from '../rightColumn/queryLog/queryLog';
+import QueryLog from '../rightColumn/queryLog';
+import QueryThreadLog from '../rightColumn/queryThreadLog';
 import Pinging from '../pinging/pinging';
 import { MainContext } from '../../contexts';
 import { hostStatuses } from '../../constans';
 import calculateScrollWidth from '../../lib/calculateScrollWidth';
 import { getConnections, saveConnections } from '../../lib/storage';
+import QueriesListPage from '../rightColumn/queriesListPage/queriesListPage';
 
 import css from './main.css';
 
 const menuKeyToPage = {
     'connections': Connections,
     'clusters': Clusters,
-    'query log': QueryLog
+    'query_log': QueryLog,
+    'query_thread_log': QueryThreadLog,
+    'queries list': QueriesListPage
 };
 const menuItems = Object.keys(menuKeyToPage);
 

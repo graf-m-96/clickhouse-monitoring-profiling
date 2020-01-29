@@ -1,0 +1,46 @@
+.root {
+    margin-bottom: 40px;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 20px;
+    margin-bottom: 8px;
+}
+
+.list {
+    max-height: 332px;
+    overflow: auto;
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.icon:first-of-type {
+    margin-bottom: 12px;
+}
+
+.query {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.query__buttons {
+    display: flex;
+    flex-direction: column;
+    margin-right: 12px;
+}
+
+.query__text {
+    white-space: pre-wrap;
+    background: #fafafa;
+    padding: 8px;
+    border: 1px #d3d3d3 solid;
+    border-radius: 4px;
+    box-sizing: border-box;
+    flex-grow: 1;
+}

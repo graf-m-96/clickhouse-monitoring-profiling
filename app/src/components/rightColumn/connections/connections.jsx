@@ -6,7 +6,7 @@ import Plus from '../../../public/icons/plus-sign.svg';
 import Delete from '../../../public/icons/delete.svg';
 import { connectionInputs, connectionInputsInOrder } from '../../../constans';
 import { MainContext } from '../../../contexts';
-import HostStatus from '../../status/hostStatus';
+import HostStatus from '../../hostsStatus/hostStatus';
 
 import css from './connections.css';
 

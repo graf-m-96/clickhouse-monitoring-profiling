@@ -14,7 +14,7 @@ import css from './table.css';
 
 const heightColumn = 71;
 
-function Table({
+function TableFC({
     allColumns,
     data,
     updateWhere = _noop,
@@ -153,7 +153,17 @@ function Table({
     );
 }
 
-Table.propTypes = {
+class Table extends React.PureComponent {
+    render() {
+        return (
+            <TableFC
+                {...this.props}
+            />
+        );
+    }
+}
+
+TableFC.propTypes = {
     allColumns: PropTypes.arrayOf(PropTypes.object).isRequired,
     data: PropTypes.array.isRequired,
     hiddenColumns: PropTypes.object,
@@ -161,5 +171,7 @@ Table.propTypes = {
     defaultColumn: PropTypes.object,
     options: PropTypes.object
 };
+
+Table.propTypes = TableFC.propTypes;
 
 export default Table;

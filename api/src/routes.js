@@ -6,5 +6,5 @@ module.exports = app => {
     app.post('/ping', clickHouseController.ping);
     app.post('/clusters', clickHouseController.clusters);
     app.post('/ping_remote', clickHouseController.pingRemote);
-    app.post('/query_log', clickHouseController.queryLog);
+    app.post('/query', clickHouseController.query);
 };

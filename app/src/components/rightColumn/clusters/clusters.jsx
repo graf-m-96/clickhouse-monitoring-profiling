@@ -5,7 +5,7 @@ import Dropdown from '../../dropdown/dropdown';
 import Table from '../table/table';
 import { MainContext } from '../../../contexts';
 import { hostStatuses } from '../../../constans';
-import HostStatus from '../../status/hostStatus';
+import HostStatus from '../../hostsStatus/hostStatus';
 
 import css from './clusters.css';
 

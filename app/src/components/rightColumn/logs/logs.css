@@ -17,7 +17,7 @@
 .hiddenColumns__title,
 .currentQuery__title,
 .limit__title,
-.connection__title {
+.clusters__title {
     font-size: 18px;
     font-weight: 600;
     margin-left: 20px;
@@ -48,16 +48,6 @@
     cursor: pointer;
 }
 
-.dbSettings,
-.currentQuery__body {
-    margin: 0 0 20px 11px;
-}
-
-.dbSettings {
-    display: flex;
-    align-items: flex-end;
-}
-
 .button {
     /* delete styles */
     background: none;
@@ -74,16 +64,37 @@
 
 .dbSettings__button,
 .dbSettings__limit,
-.dbSettings__connection {
-    margin-right: 40px;
-}
-
-.limit__title,
-.connection__title {
-    text-align: center;
-    margin-left: 0;
+.dbSettings__clusters {
+    margin-bottom: 20px;
 }
 
 .limit__input {
     width: 100px;
+}
+
+.cluster {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.claster__input {
+    margin-right: 12px;
+}
+
+.dbSettings__button,
+.limit__input,
+.currentQuery__body {
+    margin-left: 11px;
+}
+
+.clusters__radiobuttons {
+    margin-left: 6px;
+}
+
+.currentQuery__body {
+    white-space: pre-wrap;
+    background: #fafafa;
+    padding: 8px;
+    border: 1px #d3d3d3 solid;
+    border-radius: 4px;
 }

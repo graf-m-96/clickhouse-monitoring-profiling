@@ -1,41 +1,63 @@
 import React from 'react';
-import ReactLoading from 'react-loading';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import ReactLoading from 'react-loading';
 
 import { MainContext } from '../../../contexts';
 import ApiManager from '../../../lib/requests';
 import Table from '../table/table';
 import Dropdown from '../../dropdown/dropdown';
 import { hostStatuses } from '../../../constans';
+import ClusterDescription from '../clusterDescription/clusterDescription';
 
-import css from './queryLog.css';
+import css from './logs.css';
 
 const rowLength = 4;
 
-class QueryLog extends React.Component {
+class Logs extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             autoloadingToggle: false,
-            autoloadingTimeout: 3000,
+            autoloadingTimeout: 20000,
             hiddenColumns: {},
+            clusterIndex: 0,
             limitCount: 1000,
             query: ''
         };
         this.autoloadingTimeoutRef = React.createRef();
         this.where = {};
+        this.timeoutId = null;
     }
 
     componentDidMount() {
-        this.runPolling();
+        this.clusterIsLoaded = this.context.clusters !== undefined;
+
+        if (this.clusterIsLoaded) {
+            this.onRun();
+        }
     }
+
+    componentDidUpdate() {
+        if (!this.clusterIsLoaded && this.context.clusters !== undefined) {
+            this.clusterIsLoaded = true;
+            this.onRun();
+        }
+    }
+
+    onRun = () => {
+        const query = this.makeQuery();
+        this.sendQuery(query);
+        this.setState({ query });
+    };
 
     static contextType = MainContext;
 
-    runPolling = async () => {
+    sendQuery = async (query) => {
         try {
-            const connection = this.context.connections[this.context.connectionIndex];
-            const logs = await ApiManager.getQueryLogs(connection);
+            const { connections, connectionIndex } = this.context;
+            const connection = connections[connectionIndex];
+            const logs = await ApiManager.sendQuery(connection, query);
             this.setLogs(logs);
         } catch (error) {
             this.setError(error);
@@ -101,8 +123,22 @@ class QueryLog extends React.Component {
     }
 
     toggleAutoloading = event => {
-        this.autoloadingTimeoutRef.current.disabled = !event.target.checked;
-        this.setState({ autoloadingToggle: event.target.checked });
+        const checked = event.target.checked;
+        this.autoloadingTimeoutRef.current.disabled = !checked;
+        this.setState({ autoloadingToggle: checked });
+
+        if (checked) {
+            this.runPolling();
+        } else {
+            clearTimeout(this.timeoutId);
+        }
+    };
+
+    runPolling = () => {
+        this.timeoutId = setTimeout(() => {
+            this.onRun();
+            this.runPolling();
+        }, this.state.autoloadingTimeout);
     };
 
     setAutoloaingTimeout = event => {
@@ -164,6 +200,8 @@ class QueryLog extends React.Component {
     };
 
     renderCurrentQuery = () => {
+        const { query } = this.state;
+
         return (
             <div className={css.currentQuery}>
                 <Dropdown
@@ -171,7 +209,7 @@ class QueryLog extends React.Component {
                     header={<div>Current Query</div>}
                 >
                     <div className={css.currentQuery__body}>
-                        query
+                        {query}
                     </div>
                 </Dropdown>
             </div>
@@ -179,42 +217,90 @@ class QueryLog extends React.Component {
     };
 
     renderDbSettings = () => {
+        const { clusters, clustersStatuses } = this.context;
         const { limitCount } = this.state;
 
         return (
-            <div className={css.dbSettings}>
+            <div>
+                <div className={css.dbSettings__limit}>
+                    <Dropdown
+                        classNameHeader={css.limit__title}
+                        header={<div>Limit</div>}
+                    >
+                        <input
+                            className={css.limit__input}
+                            type="number"
+                            value={limitCount}
+                            onChange={this.setLimit}
+                        />
+                    </Dropdown>
+                </div>
+                <div className={css.dbSettings__clusters}>
+                    <Dropdown
+                        classNameHeader={css.clusters__title}
+                        header={<div>Connection</div>}
+                    >
+                        <div className={css.clusters__radiobuttons}>
+                            {clusters.map((cluster, index) => (
+                                <label
+                                    className={css.cluster}
+                                    key={index}
+                                >
+                                    <input
+                                        name="cluster"
+                                        type="radio"
+                                        className={css.claster__input}
+                                        defaultChecked={index === 0}
+                                        data-cluster-index={index}
+                                        onChange={this.setCluster}
+                                    />
+                                    <ClusterDescription
+                                        status={clustersStatuses[index]}
+                                        host={cluster.host_name}
+                                        port={cluster.port}
+                                        user={cluster.user}
+                                    />
+                                </label>
+                            ))}
+                        </div>
+                    </Dropdown>
+                </div>
                 <button
                     className={classNames(css.button, css.dbSettings__button)}
                     onClick={this.onRun}
                 >
                     Run
                 </button>
-                <div className={css.dbSettings__limit}>
-                    <div className={css.limit__title}>Limit</div>
-                    <input
-                        className={css.limit__input}
-                        type="number"
-                        value={limitCount}
-                        onChange={this.setLimit}
-                    />
-                </div>
-                <div className={css.dbSettings__connection}>
-                    <div className={css.connection__title}>Connection</div>
-                    <select className={css.connection__select}>
-                        <option>Пункт 1</option>
-                        <option>Пункт 2</option>
-                    </select>
-                </div>
             </div>
         );
+    };
+
+    setCluster = event => {
+        const index = parseInt(event.target.dataset.clusterIndex);
+        this.setState({ clusterIndex: index });
     };
 
     setLimit = event => {
         this.setState({ limitCount: event.target.value });
     };
 
-    onRun = () => {
-        console.log('qq');
+    makeQuery = () => {
+        const { connections, connectionIndex, clusters } = this.context;
+        const { tableName } = this.props;
+        const { limitCount, clusterIndex } = this.state;
+
+        const connection = connections[connectionIndex];
+        const cluster = clusters[clusterIndex];
+        const conditions = Object.values(this.where).join(' and\n');
+        const { host_name: otherHost, port: otherPort } = cluster;
+        const { user, password } = connection;
+
+        const first = `select * from
+remote('${otherHost}:${otherPort}', system.${tableName}, '${user}', '${password}')\n`;
+        const second = conditions ? `where ${conditions}\n` : '';
+        const three = `limit ${limitCount}`;
+
+        return [first, second, three].join('');
     };
 
     prepareAnswer = logs => {
@@ -238,7 +324,7 @@ class QueryLog extends React.Component {
     };
 
     render() {
-        const { connectionIndex, connectionsStatuses } = this.context;
+        const { connectionIndex, connectionsStatuses, clusters } = this.context;
         const { logs, columns, data, error, hiddenColumns } = this.state;
 
         if (connectionIndex === undefined) {
@@ -265,7 +351,7 @@ class QueryLog extends React.Component {
             );
         }
 
-        if (!logs) {
+        if (!logs || !clusters) {
             return (
                 <ReactLoading
                     type="spinningBubbles"
@@ -291,4 +377,8 @@ class QueryLog extends React.Component {
     }
 }
 
-export default QueryLog;
+Logs.propTypes = {
+    tableName: PropTypes.string.isRequired
+};
+
+export default Logs;

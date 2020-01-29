@@ -3,9 +3,14 @@
     align-items: center;
 }
 
+.text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .square {
-    width: 16px;
-    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
     margin-right: 4px;
     border-radius: 4px;
 }

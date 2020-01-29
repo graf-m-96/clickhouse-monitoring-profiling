@@ -12,9 +12,15 @@ const filterTypes = {
     Date: 'Date',
     DateTime: 'DateTime',
     Int: 'Int',
-    Array: 'Array',
-    Str: 'Str'
+    ArrayStrings: 'ArrayString',
+    ArrayNumbers: 'ArrayNumbers',
+    IPv6: 'IPv6',
+    IPv4: 'IPv4',
+    StringLike: 'StringLike'
 };
+
+const wrapInQuotes = str => `'${str}'`;
+const escapeQuote = str => replaceAll(str, '\'', '\\\'');
 
 class Filter extends React.Component {
     constructor(props) {
@@ -38,16 +44,18 @@ class Filter extends React.Component {
                 const [key, value] = str.split('=');
                 this.variants[key] = value;
             });
+        } else if (s.startsWith('Int') || s.startsWith('UInt')) {
+            this.type = filterTypes.Int;
         } else if (s === filterTypes.Date) {
             this.type = filterTypes.Date;
         } else if (s === filterTypes.DateTime) {
             this.type = filterTypes.DateTime;
-        } else if (s.startsWith('Int') || s.startsWith('UInt')) {
-            this.type = filterTypes.Int;
         } else if (s.startsWith('Array')) {
-            this.type = filterTypes.Array;
+            this.type = s.includes('String') ? filterTypes.ArrayStrings : filterTypes.ArrayNumbers;
+        } else if (s.startsWith('IPv')) {
+            this.type = s.includes('6') ? filterTypes.IPv6 : filterTypes.IPv4;
         } else {
-            this.type = filterTypes.Str;
+            this.type = filterTypes.StringLike;
         }
     };
 
@@ -60,7 +68,7 @@ class Filter extends React.Component {
                     return '';
                 }
                 const where = event.map(variant => {
-                    return `${fieldName} = ${variant.label}`;
+                    return `${fieldName} = ${wrapInQuotes(variant.label)}`;
                 })
                     .join(' or ');
 
@@ -73,7 +81,7 @@ class Filter extends React.Component {
                 }
                 const value = this.ref1.current.value.replace('T', ' ');
 
-                return `${fieldName} = '${value}'`;
+                return `${fieldName} = ${wrapInQuotes(value)}`;
             }
             case filterTypes.Int: {
                 if (!this.ref1.current || !this.ref2.current) {
@@ -93,15 +101,30 @@ class Filter extends React.Component {
 
                 return results.join(' and ');
             }
-            case filterTypes.Array: {
+            case filterTypes.ArrayNumbers: {
                 const value = this.ref1.current.value;
 
                 return `has(${fieldName}, ${value})`;
             }
+            case filterTypes.ArrayStrings: {
+                const value = this.ref1.current.value;
+
+                return `has(${fieldName}, ${wrapInQuotes(escapeQuote(value))})`;
+            }
+            case filterTypes.IPv4: {
+                const value = this.ref1.current.value;
+
+                return `${fieldName} = IPv4StringToNum(${wrapInQuotes(value)})`;
+            }
+            case filterTypes.IPv6: {
+                const value = this.ref1.current.value;
+
+                return `${fieldName} = IPv6StringToNum(${wrapInQuotes(value)})`;
+            }
             default: {
                 const value = this.ref1.current.value;
 
-                return `${fieldName} = ${value}`;
+                return `${fieldName} = ${wrapInQuotes(escapeQuote(value))}`;
             }
         }
     };
@@ -161,7 +184,7 @@ class Filter extends React.Component {
                 );
             default:
                 return (
-                    <input
+                    <textarea
                         onChange={this.onChange}
                         ref={this.ref1}
                     />

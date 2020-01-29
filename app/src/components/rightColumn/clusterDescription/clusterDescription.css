@@ -1,0 +1,14 @@
+.root {
+    display: flex;
+    cursor: pointer;
+}
+
+.address {
+    min-width: 120px;
+}
+
+.status,
+.address,
+.user {
+    margin-right: 10px;
+}
