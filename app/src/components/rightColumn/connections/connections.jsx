@@ -196,31 +196,31 @@ class Connections extends React.Component {
         this.context.selectConnection(index);
     };
 
-    renderMenu = () => {
+    renderAddButton = () => {
         return (
-            <div className={css.menu}>
-                <button className={classNames(css.button, css.buttonAdd)}>
-                    <Plus className={css.buttonAddPlus} />
-                    Add connection
-                </button>
-            </div>
+            <button className={classNames(css.button, css.buttonAdd)}>
+                <Plus className={css.buttonAddPlus} />
+                Add connection
+            </button>
         );
     };
 
     render() {
         return (
             <div>
-                <Popup
-                    trigger={this.renderMenu()}
-                    modal
-                    closeOnDocumentClick
-                    lockScroll
-                    className={css.popup}
-                    overlayStyle={modalStyles.overlayStyle}
-                    contentStyle={modalStyles.contentStyle}
-                >
-                    {close => this.renderPopup(close)}
-                </Popup>
+                <div className={css.menu}>
+                    <Popup
+                        trigger={this.renderAddButton()}
+                        modal
+                        closeOnDocumentClick
+                        lockScroll
+                        className={css.popup}
+                        overlayStyle={modalStyles.overlayStyle}
+                        contentStyle={modalStyles.contentStyle}
+                    >
+                        {close => this.renderPopup(close)}
+                    </Popup>
+                </div>
                 {this.renderConnections()}
             </div>
         );
