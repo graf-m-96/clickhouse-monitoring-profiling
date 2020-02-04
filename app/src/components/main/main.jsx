@@ -11,6 +11,7 @@ import { hostStatuses } from '../../constans';
 import calculateScrollWidth from '../../lib/calculateScrollWidth';
 import { getConnections, saveConnections } from '../../lib/storage';
 import QueriesListPage from '../rightColumn/queriesListPage/queriesListPage';
+import Graphics from '../rightColumn/graphics/graphics';
 
 import css from './main.css';
 
@@ -19,7 +20,8 @@ const menuKeyToPage = {
     'clusters': Clusters,
     'query_log': QueryLog,
     'query_thread_log': QueryThreadLog,
-    'queries list': QueriesListPage
+    'queries list': QueriesListPage,
+    'graphics': Graphics
 };
 const menuItems = Object.keys(menuKeyToPage);
 
@@ -43,6 +45,8 @@ class Main extends React.Component {
             clustersStatuses: undefined,
             setClusters: this.setClusters,
             updateClustersStatuses: this.updateClustersStatuses,
+
+            stressQuery: [],
 
             scrollWidth: 0
         };
@@ -116,6 +120,10 @@ class Main extends React.Component {
 
     updateConnectionStatus = statuses => {
         this.setState({ connectionsStatuses: statuses });
+    };
+
+    clearStressQuery = () => {
+        this.setState({ stress: [] });
     };
 
     componentDidMount() {

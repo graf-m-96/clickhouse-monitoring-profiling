@@ -1,0 +1,44 @@
+.errorMessage {
+    margin: 20px;
+}
+
+.root {
+    margin: 10px 20px;
+}
+
+.time {
+    margin-bottom: 20px;
+}
+
+.query__title {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 12px;
+}
+
+.title__main {
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 20px;
+    margin-bottom: 5px;
+    margin-right: 4px;
+}
+
+.title__description {
+    display: inline-block;
+    color: #999;
+}
+
+.select {
+    background: none;
+    outline: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none !important;
+
+    width: 100px;
+    padding: 5px;
+    border: solid darkgray 1px;
+    border-radius: 5px;
+}
