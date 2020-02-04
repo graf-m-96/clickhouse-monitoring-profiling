@@ -3,12 +3,23 @@ import React from 'react';
 import { LineChart, Line, XAxis, Tooltip, CartesianGrid } from 'recharts';
 
 import { MainContext } from '../../../contexts';
-import ApiManager from '../../../lib/requests';
 import { hostStatuses } from '../../../constans';
 
 import css from './graphics.css';
 
-const queryForMetrics = 'select * from system.metrics';
+const colors = [
+    '#37bff2',
+    '#169833',
+    '#f6ab31',
+    '#c95edd',
+    '#e85b4e',
+    '#409fd4',
+    '#7bbf00',
+    '#ff2727',
+    '#80f320'
+];
+
+const getColor = index => colors[index % colors.length];
 
 class Graphics extends React.Component {
     static contextType = MainContext;
@@ -16,51 +27,22 @@ class Graphics extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            interval: 1,
-            error: undefined
+            interval: 1
         };
     }
 
-    componentDidMount() {
-        this.clusterIsLoaded = this.context.clusters !== undefined;
-
-        if (this.clusterIsLoaded) {
-            this.runPolling();
-        }
-    }
-
-    componentDidUpdate() {
-        if (!this.clusterIsLoaded && this.context.clusters !== undefined) {
-            this.clusterIsLoaded = true;
-            this.runPolling();
-        }
-    }
-
-    runPolling = async () => {
-    //     try {
-    //         const { connections, connectionIndex } = this.context;
-    //         const connection = connections[connectionIndex];
-    //         const logs = await ApiManager.sendQuery(connection, queryForMetrics);
-    //         console.log('logs: ', logs);
-    //         this.setLogs(logs);
-    //     } catch (error) {
-    //         console.log('error: ', error);
-    //         this.setError(error);
-    //     }
-    };
-
-    // setLogs = logs => {
-    //     const { columns, data } = this.prepareAnswer(logs);
-    //     this.setState({ logs, columns, data, error: false });
-    // };
-
-    // setError = error => {
-    //     this.setState({ error: error.message });
-    // };
-
-    renderMain = () => {
+    renderContent = () => {
         return (
             <div className={css.root}>
+                {this.renderUtils()}
+                {this.renderGraphic()}
+            </div>
+        );
+    };
+
+    renderUtils = () => {
+        return (
+            <>
                 <div className={css.query__title}>
                     <div className={css.title__main}>Query </div>
                     <div className={css.title__description}>(average number of executing queries)</div>
@@ -76,9 +58,8 @@ class Graphics extends React.Component {
                         <option value="24">1 day</option>
                     </select>
                 </div>
-                {this.renderGraphic()}
-            </div>
-        )
+            </>
+        );
     };
 
     renderGraphic = () => {
@@ -92,7 +73,7 @@ class Graphics extends React.Component {
             { name: 'Page G', uv: 189, pv: 4800 },
             { name: 'Page H', uv: 189, pv: 4800 },
             { name: 'Page I', uv: 189, pv: 4800 },
-            { name: 'Page J', uv: 189, pv: 4800 },
+            { name: 'Page J', uv: 189, pv: 4800 }
         ];
 
         return (
@@ -113,38 +94,30 @@ class Graphics extends React.Component {
 
     onChangeSelect = event => {
         const interval = event.target.value;
+
         this.setState({ interval });
     };
 
     render() {
-        const { connectionIndex, connectionsStatuses } = this.context;
-        const { error } = this.state;
+        // const { connectionIndex, connectionsStatuses } = this.context;
+        //
+        // if (connectionIndex === undefined) {
+        //     return (
+        //         <div className={css.errorMessage}>
+        //             Connection is not selected
+        //         </div>
+        //     );
+        // }
+        //
+        // if (connectionsStatuses[connectionIndex] === hostStatuses.unachievable) {
+        //     return (
+        //         <div className={css.errorMessage}>
+        //             Connection is not unachievable
+        //         </div>
+        //     );
+        // }
 
-        if (connectionIndex === undefined) {
-            return (
-                <div className={css.errorMessage}>
-                    Connection is not selected
-                </div>
-            );
-        }
-
-        if (connectionsStatuses[connectionIndex] === hostStatuses.unachievable) {
-            return (
-                <div className={css.errorMessage}>
-                    Connection is not unachievable
-                </div>
-            );
-        }
-
-        if (error) {
-            return (
-                <div className={css.errorMessage}>
-                    {error}
-                </div>
-            );
-        }
-
-        return this.renderMain();
+        return this.renderContent();
     }
 }
 

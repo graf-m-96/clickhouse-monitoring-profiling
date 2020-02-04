@@ -9,7 +9,7 @@ export const getConnections = () => {
         if (value === null) {
             return [];
         }
-    
+
         return JSON.parse(value);
     } catch (error) {
         console.error(error);
@@ -31,11 +31,11 @@ export const getQueries = () => {
         if (value === null) {
             return [];
         }
-    
+
         return JSON.parse(value);
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
+
         return [];
     }
 };

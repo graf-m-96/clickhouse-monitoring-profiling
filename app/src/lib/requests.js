@@ -55,4 +55,10 @@ export default class ApiManager {
         })
             .then(answer => answer.data);
     }
+
+    static getMetrics(options) {
+        const query = 'select * from system.metrics';
+
+        return ApiManager.sendQuery(options, query);
+    }
 }

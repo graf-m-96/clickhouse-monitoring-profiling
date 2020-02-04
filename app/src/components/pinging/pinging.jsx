@@ -5,10 +5,12 @@ import ApiManager from '../../lib/requests';
 import { answerToHostStatus, hostStatuses } from '../../constans';
 
 const timeout = 1000;
+const timeoutClear = 1000 * 60 * 60 * 24;
 
 class PingingConnections extends React.Component {
     static contextType = MainContext;
     intervalId;
+    intervalClearId;
 
     componentDidMount() {
         this.runPolling();
@@ -16,13 +18,25 @@ class PingingConnections extends React.Component {
 
     componentWillUnmount() {
         clearInterval(this.intervalId);
+        clearInterval(this.intervalClearId);
     }
 
     runPolling = () => {
         this.intervalId = setInterval(() => {
             this.runPollingConnections();
             this.runPollingClusters();
+            this.runPollingMetrics();
         }, timeout);
+
+        this.intervalClearId = setInterval(() => {
+
+        }, timeoutClear);
+    };
+
+    clearMetrics = () => {
+        const { metrics } = this.context;
+
+        // TODO
     };
 
     runPollingConnections = async () => {
@@ -86,6 +100,39 @@ class PingingConnections extends React.Component {
             // ignore
         }
     };
+
+    runPollingMetrics = async () => {
+        try {
+            const { connectionIndex, connectionsStatuses, connections, clusters } = this.context;
+
+            if (connectionIndex === undefined ||
+                connectionsStatuses[connectionIndex] === hostStatuses.unachievable ||
+                clusters === undefined) {
+                return null;
+            }
+
+            const connection = connections[connectionIndex];
+
+            const answers = await Promise.all(clusters.map(cluster => {
+                const options = {
+                    host: connection.host,
+                    port: connection.port,
+                    user: connection.user,
+                    password: connection.password,
+                    otherHost: cluster.host_name,
+                    otherPort: cluster.port
+                };
+
+                return ApiManager.getMetrics(options);
+            }));
+
+            // TODO
+        } catch (e) {
+            // ignore
+        }
+    };
+
+    getClusterName = cluster => `${cluster.host_name}:${cluster.port}`;
 
     convertAnswerToStatus = answer => {
         return answer in answerToHostStatus

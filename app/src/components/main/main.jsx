@@ -46,7 +46,8 @@ class Main extends React.Component {
             setClusters: this.setClusters,
             updateClustersStatuses: this.updateClustersStatuses,
 
-            stressQuery: [],
+            metrics: [],
+            updateMetrics: this.updateMetrics,
 
             scrollWidth: 0
         };
@@ -116,14 +117,19 @@ class Main extends React.Component {
     selectConnection = index => {
         this.setState({ connectionIndex: index });
         this.clearClusters();
+        this.clearMetrics();
     };
 
     updateConnectionStatus = statuses => {
         this.setState({ connectionsStatuses: statuses });
     };
 
-    clearStressQuery = () => {
-        this.setState({ stress: [] });
+    updateMetrics = metrics => {
+        this.setState({ metrics });
+    };
+
+    clearMetrics = () => {
+        this.setState({ metrics: [] });
     };
 
     componentDidMount() {
