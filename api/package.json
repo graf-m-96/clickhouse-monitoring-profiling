@@ -8,7 +8,8 @@
   "scripts": {
     "lint": "eslint . --ext .js",
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "ddos": "node utils/ddos.js"
   },
   "engines": {
     "node": "12.14.0"

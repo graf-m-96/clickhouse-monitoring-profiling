@@ -48,6 +48,7 @@ class Main extends React.Component {
 
             metrics: [],
             updateMetrics: this.updateMetrics,
+            addMetrics: this.addMetrics,
 
             scrollWidth: 0
         };
@@ -122,6 +123,17 @@ class Main extends React.Component {
 
     updateConnectionStatus = statuses => {
         this.setState({ connectionsStatuses: statuses });
+    };
+
+    addMetrics = values => {
+        const time = (new Date()).toJSON();
+        const addedMetric = {
+            time,
+            values
+        };
+        const newMetrics = [...this.state.metrics, addedMetric];
+
+        this.setState({ metrics: newMetrics });
     };
 
     updateMetrics = metrics => {

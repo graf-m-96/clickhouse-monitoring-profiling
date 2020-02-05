@@ -1,11 +1,12 @@
 import React from 'react';
+import moment from 'moment';
 
 import { MainContext } from '../../contexts';
 import ApiManager from '../../lib/requests';
 import { answerToHostStatus, hostStatuses } from '../../constans';
 
 const timeout = 1000;
-const timeoutClear = 1000 * 60 * 60 * 24;
+const timeoutClear = 1000 * 60;
 
 class PingingConnections extends React.Component {
     static contextType = MainContext;
@@ -29,14 +30,25 @@ class PingingConnections extends React.Component {
         }, timeout);
 
         this.intervalClearId = setInterval(() => {
-
+            this.clearMetrics();
         }, timeoutClear);
     };
 
     clearMetrics = () => {
-        const { metrics } = this.context;
+        const { metrics, updateMetrics } = this.context;
 
-        // TODO
+        const index = metrics.findIndex(({ time }) => {
+            const date = new Date(time);
+
+            return moment(new Date()).subtract(1, 'day')
+                .isBefore(date);
+        });
+
+        if (index !== -1) {
+            const newMetrics = metrics.slice(index);
+
+            updateMetrics(newMetrics);
+        }
     };
 
     runPollingConnections = async () => {
@@ -103,7 +115,7 @@ class PingingConnections extends React.Component {
 
     runPollingMetrics = async () => {
         try {
-            const { connectionIndex, connectionsStatuses, connections, clusters } = this.context;
+            const { connectionIndex, connectionsStatuses, connections, clusters, addMetrics } = this.context;
 
             if (connectionIndex === undefined ||
                 connectionsStatuses[connectionIndex] === hostStatuses.unachievable ||
@@ -113,7 +125,8 @@ class PingingConnections extends React.Component {
 
             const connection = connections[connectionIndex];
 
-            const answers = await Promise.all(clusters.map(cluster => {
+            const promices = [];
+            for (let cluster of clusters) {
                 const options = {
                     host: connection.host,
                     port: connection.port,
@@ -123,16 +136,19 @@ class PingingConnections extends React.Component {
                     otherPort: cluster.port
                 };
 
-                return ApiManager.getMetrics(options);
-            }));
+                const promise = ApiManager.getMetrics(options)
+                    .then(answer => Number(answer.data[0][1]))
+                    .catch(() => null);
+                promices.push(promise);
+            }
 
-            // TODO
+            const values = await Promise.all(promices);
+
+            addMetrics(values);
         } catch (e) {
             // ignore
         }
     };
-
-    getClusterName = cluster => `${cluster.host_name}:${cluster.port}`;
 
     convertAnswerToStatus = answer => {
         return answer in answerToHostStatus

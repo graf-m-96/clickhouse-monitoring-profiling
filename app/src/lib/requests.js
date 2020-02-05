@@ -57,7 +57,9 @@ export default class ApiManager {
     }
 
     static getMetrics(options) {
-        const query = 'select * from system.metrics';
+        const { otherHost, otherPort, user, password } = options;
+        const query = `select *
+from remote('${otherHost}:${otherPort}', system.metrics, '${user}', '${password}')`;
 
         return ApiManager.sendQuery(options, query);
     }
